@@ -59,14 +59,14 @@ t_type secant(t_type a, t_type b, exprtk::expression<t_type>& func, t_type& TOL,
 	else if(tp == type3){
 		file.open("data3.csv");
 		file << "DISTANCIA ENTRE EXTREMOS\n";
-    file << "k,a,b,r,|r-ra|,f(r)\n";
+    file << "k,pr,r,|r-ra|,f(r)\n";
 		t_type pf = a;
     for(int i = 1;fabs(p-pf) > TOL; ++i){
       x = a;
       fa = func.value();
       x = p;
       fp = func.value();
-			file << i << "," << a << "," << b << "," << p << "," << fabs(p-pf) << "," << fp << "\n";
+			file << i  << "," << pf << "," << p << "," << fabs(p-pf) << "," << fp << "\n";
       pf = p;
 			if (fa == fp)
         break;
@@ -99,19 +99,19 @@ void parse_function(std::string& expression_string, t_type& a, t_type& b, t_type
 }
 
 main(){
-	std::string expression = "10*(x^3) + x*atan(x + 2*pi) + 5";
+	std::string expression = "(x ^ 3) + (3 * (x ^ 2) * cos(x)) - 1";
 	t_type a,b,tol;
 	//std::cout << "Enter your function: f(x):";
 	//std::cin>>expression;
 	std::cout << "Enter the interval: ";
 	std::cin>>a>>b;
-	std::cout << "Enter the number of iterations";
-	std::cin>>tol;
-	parse_function(expression,a,b,tol,type1);
-	std::cout << "Enter the Tolerance";
-	std::cin>>tol;
-	parse_function(expression,a,b,tol,type2);
-	std::cout << "Enter the distance on the interval";		
+	//std::cout << "Enter the number of iterations";
+	//std::cin>>tol;
+	//parse_function(expression,a,b,tol,type1);
+	//std::cout << "Enter the Tolerance";
+	//std::cin>>tol;
+	//parse_function(expression,a,b,tol,type2);
+	std::cout << "Enter the tolerance: ";		
 	std::cin>>tol;
 	parse_function(expression,a,b,tol,type3);
 	return 0;

@@ -2,10 +2,10 @@
 #include<vector>
 #include<cmath>
 using namespace std;
-typedef double c_matrix;
+typedef double c_num;
 typedef int c_len;
-typedef vector< vector<c_matrix> > matrix;
-typedef vector<c_matrix> results;
+typedef vector< vector<c_num> > matrix;
+typedef vector<c_num> results;
 void CreateMatrix(matrix *&Arr, c_len n, c_len m){
   Arr = new matrix(n);
   for(int i = 0; i < n; ++i)
@@ -15,7 +15,7 @@ void CreateMatrix(matrix *&Arr, c_len n, c_len m){
 matrix *ProductMatrix(matrix *&A, matrix *&B, c_len n){
   matrix * R;
   CreateMatrix(R,n,n);
-  c_matrix m = 0;
+  c_num m = 0;
   for(int i = 0; i < n; ++i)
     for(int j = 0; j < n; ++j)
       for(int k = 0; k < n; ++k)
@@ -30,24 +30,30 @@ void Identity(matrix *&Arr, c_len n){
 }
 
 void SusRegresivaDown(matrix *&L, results *&y, results *&b, c_len n){
-  c_matrix t;
+  c_num t;
+	cout << "Vector de Resultados" << endl;
 	for(c_len i = 0; i < n; ++i){
 		t = (*b)[i];
 		for(c_len j = i-1; j > -1; --j){
 			t = t - (*L)[i][j] * ((*y)[j]);
 		}
 		(*y)[i]=t;
+		cout<< t << " ";
 	}
+	cout << endl;
 }
 
 void SusRegresivaUpper(matrix *&U, results *&y, results *&b, c_len n){
-	c_matrix t;
+	c_num t;
+	cout << "Resultados" <<  endl;
 	for(c_len i = n-1; i > -1; --i){
 		t = (*y)[i];
 		for(c_len j = n-1; j > i; --j)
 			t = t - (*U)[i][j] * ((*b)[j]);
 		(*b)[i] = t / (*U)[i][i];
+		cout << (*b)[i] << " ";
 	}
+	cout << endl;
 }
 
 void printMatrix(const matrix *L,c_len w, c_len h){
@@ -67,7 +73,8 @@ void MatrixCopy(matrix *&A, matrix *&B, c_len n){
 //////////////////////////////////////////////////
 
 bool DescompLU(matrix *&U, matrix *&L, c_len n){
-  c_matrix m;
+  c_num m;
+	cout << "Descomposicion LU" << endl;
 	for(c_len i = 0; i < n - 1; ++i){
     if((*U)[i][i] == 0)
       return 0;
@@ -78,6 +85,10 @@ bool DescompLU(matrix *&U, matrix *&L, c_len n){
         (*U)[j+1][k] = (*U)[j+1][k] - (m * ((*U)[i][k]));
 		}
 	}
+	cout << "Matrix L" << endl;
+	printMatrix(L,n,n);
+	cout << "Matrix U" << endl;
+	printMatrix(U,n,n);
   return 1;
 }
 
@@ -88,8 +99,8 @@ void DescompPLU(matrix *&U, matrix *&L, matrix *&P, c_len n){
   results v;
   for(int i = 0; i < n; i++)
     v.push_back(i);
-  c_matrix m, max = 0;
-	c_matrix row = 0;
+  c_num m, max = 0;
+	c_num row = 0;
   for(c_len i = 0; i < n - 1; ++i){
 		max = (*U)[i][i];
     row = i;
@@ -143,9 +154,14 @@ void ResolverSistemaEcuaciones(matrix*&A, results *&b, c_len n){
   CreateMatrix(C,n,n);
   MatrixCopy(C,A,n);
   results *y;
+	results *w;
+	w = new results(n);
+	for (int i = 0; i < n; ++i)
+		(*w)[i] = (*b)[i];
   y = new results(n);
   if(LU(C,L,b,y,n)){
-    PrintVector(b,n);
+
+    //PrintVector(b,n);
     cout << "Sistema Resuelto por LU" << endl;
     C->clear();
   }
@@ -156,32 +172,32 @@ void ResolverSistemaEcuaciones(matrix*&A, results *&b, c_len n){
   }
 }
 
-main(){
+/*main(){
   c_len n = 4;
   matrix *A;
   results *b;
   b = new results(n);
   (*b)[0]=1;
   (*b)[1]=2;
-  (*b)[2]=3;
-  (*b)[3]=4;
+  (*b)[2]=-2;
+  (*b)[3]=5;
   CreateMatrix(A,n,n);
-  (*A)[0][0] = 1;
-  (*A)[0][1] = 2;
-  (*A)[0][2] = 3;
-  (*A)[0][3] = 4;
-  (*A)[1][0] = 5;
-  (*A)[1][1] = 6;
-  (*A)[1][2] = 7;
-  (*A)[1][3] = 8;
-  (*A)[2][0] = 9;
-  (*A)[2][1] = 10;
-  (*A)[2][2] = 11;
-  (*A)[2][3] = 12;
-  (*A)[3][0] = 13;
-  (*A)[3][1] = 14;
-  (*A)[3][2] = 15;
-  (*A)[3][3] = 16;
+  (*A)[0][0] = 2;
+  (*A)[0][1] = -1;
+  (*A)[0][2] = -1;
+  (*A)[0][3] = 1;
+  (*A)[1][0] = 1;
+  (*A)[1][1] = -1;
+  (*A)[1][2] = -1;
+  (*A)[1][3] = 1;
+  (*A)[2][0] = 3;
+  (*A)[2][1] = 2;
+  (*A)[2][2] = -1;
+  (*A)[2][3] = 3;
+  (*A)[3][0] = 2;
+  (*A)[3][1] = 1;
+  (*A)[3][2] = -2;
+  (*A)[3][3] = -1;
   ResolverSistemaEcuaciones(A,b,n);
   return 0;
-}
+}*/
